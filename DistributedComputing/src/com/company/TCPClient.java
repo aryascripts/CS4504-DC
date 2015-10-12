@@ -12,7 +12,7 @@ public class TCPClient {
         BufferedReader in = null; // for reading form ServerRouter
         InetAddress addr = InetAddress.getLocalHost();
         String host = addr.getHostAddress(); // Client machine's IP
-        String routerName = "j263-08.cse1.spsu.edu"; // ServerRouter host name
+        String routerName = "localhost"; // ServerRouter host name
         int SockNum = 5555; // port number
 
         // Tries to connect to the ServerRouter
