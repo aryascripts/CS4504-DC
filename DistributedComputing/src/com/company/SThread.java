@@ -14,6 +14,11 @@ public class SThread extends Thread
     private Socket outSocket; // socket for communicating with a destination
     private int ind; // indext in the routing table
 
+    TCPServerRouter serverRouter = new TCPServerRouter();
+
+    long startTimeinNanoS = 0L;
+    long durationOfLookup = 0L;
+
     // Constructor
     SThread(Object [][] Table, Socket toClient, int index) throws IOException
     {
@@ -38,20 +43,27 @@ public class SThread extends Thread
 
             // waits 10 seconds to let the routing table fill with all machines' information
             try{
-                Thread.currentThread().sleep(10000);
+                Thread.currentThread().sleep(4500);
             }
             catch(InterruptedException ie){
                 System.out.println("Thread interrupted");
             }
 
+
+            startTimeinNanoS = System.nanoTime();
             // loops through the routing table to find the destination
-            for ( int i=0; i<10; i++)
-            {
+            for ( int i=0; i<10; i++) {
                 if (destination.equals((String) RTable[i][0])){
                     outSocket = (Socket) RTable[i][1]; // gets the socket for communication from the table
                     System.out.println("Found destination: " + destination);
                     outTo = new PrintWriter(outSocket.getOutputStream(), true); // assigns a writer
-                }}
+                }
+            }
+            durationOfLookup = System.nanoTime() - startTimeinNanoS;
+
+            System.out.println("Duration: " + durationOfLookup);
+            serverRouter.writeToFile(String.valueOf(durationOfLookup));
+
 
             // Communication loop
             while ((inputLine = in.readLine()) != null) {
